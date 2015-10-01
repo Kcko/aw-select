@@ -28,7 +28,7 @@
 			$("#countries").AWSelect({
 
 
-				selectedValue: 'it',
+				//selectedValue: 'it',
 
 				onCreate: function(selectDiv, select) {
 
@@ -103,7 +103,7 @@
 	
 
 <select name="select1" id="countries">
-	<option value="cz" data-flag='cz.png' data-users="10 milionů">Česká republika</option>
+	<option value="cz" data-flag='cz.png' data-users="10 milionů">Česká republika - hodně dlouhý popisek aby se schválně nevešel a musel být oříznut</option>
 	<option value="de" data-flag='de.png' data-users="60 milionů">Německo</option>
 	<option value="jp" data-flag='jp.png' data-users="230 milionů">Japonsko</option>
 	<option value="it" data-flag='it.png' data-users="33 milionů">Itálie</option>

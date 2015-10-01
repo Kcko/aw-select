@@ -15,8 +15,12 @@
 	height: 40px;
 	line-height: 40px;
 	padding: 0 10px;
+	padding-right: 30px;
 	color: #fff;
 	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 
 }
 
