@@ -1,0 +1,81 @@
+.aw-select
+{
+	display: block;
+	margin: 1em 3em;
+	width: 500px;
+	position: relative;
+	/*z-index: 3;*/
+	cursor: pointer;
+	background: #fff;
+}
+
+.aw-select .header
+{
+	border: 1px solid #ccc;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 10px;
+	position: relative;
+
+}
+
+.aw-select .header:after
+{
+	content: "▼";
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	right: 10px;
+	color: #ccc;
+}
+
+.aw-select.opened .header:after
+{
+	content: "▲";
+}
+
+
+.aw-select .body
+{
+	left: 0;
+	right: 0;
+	border: 1px solid #ccc;
+	border-top: 0;
+	max-height: 200px;
+	overflow: auto;
+	position: absolute;
+	z-index: 999;
+	background: #fff;
+	top: 100%;
+	display: none;
+}
+
+.aw-select.opened .body
+{
+	display: block;
+}
+
+.aw-select .body ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+.aw-select .body ul li
+{
+	display: block;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.aw-select .body ul li:hover
+{
+	background: #ccc;
+}
+
+
+.aw-select .body ul li.selected
+{
+	background: #0080c0;
+	color: #fff;
+}

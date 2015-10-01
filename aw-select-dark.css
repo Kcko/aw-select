@@ -1,0 +1,84 @@
+.aw-select-dark
+{
+	display: block;
+	margin: 1em 3em;
+	width: 500px;
+	position: relative;
+	/*z-index: 3;*/
+	cursor: pointer;
+	background: #606060;
+}
+
+.aw-select-dark .header
+{
+	border: 1px solid #000;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 10px;
+	color: #fff;
+	position: relative;
+
+}
+
+.aw-select-dark .header:after
+{
+	content: "▼";
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	right: 10px;
+	color: #fff;
+}
+
+.aw-select-dark.opened .header:after
+{
+	content: "▲";
+}
+
+
+.aw-select-dark .body
+{
+	left: 0;
+	right: 0;
+	border: 1px solid #000;
+	border-top: 0;
+	max-height: 200px;
+	overflow: auto;
+	position: absolute;
+	z-index: 999;
+	background: #fff;
+	top: 100%;
+	display: none;
+}
+
+.aw-select-dark.opened .body
+{
+	display: block;
+	background: #606060;
+}
+
+.aw-select-dark .body ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+.aw-select-dark .body ul li
+{
+	display: block;
+	padding: 10px;
+	cursor: pointer;
+	border-bottom: 1px solid #000;
+}
+
+.aw-select-dark .body ul li:hover
+{
+	background: #ccc;
+}
+
+
+.aw-select-dark .body ul li.selected
+{
+	background: #0080c0;
+	color: #fff;
+}
