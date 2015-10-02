@@ -45,24 +45,25 @@
 	right: 0;
 	border: 1px solid #ccc;
 	border-top: 0;
-	max-height: 200px;
-	overflow: auto;
 	position: absolute;
 	z-index: 999;
 	background: #fff;
 	top: 100%;
-	display: none;
+	/*display: none;*/
+	visibility: hidden;
 }
 
 .aw-select.opened .body
 {
-	display: block;
+	visibility: visible;
 }
 
 .aw-select .body ul
 {
 	margin: 0;
 	padding: 0;
+	max-height: 200px;
+	overflow: auto;
 }
 
 .aw-select .body ul li
@@ -82,4 +83,28 @@
 {
 	background: #0080c0;
 	color: #fff;
+}
+
+
+.aw-select-search
+{
+	padding: 10px;
+}
+
+.aw-select-search input
+{
+	-moz-box-sizing: border-box;	
+	box-sizing: border-box;
+	width: 100%;
+	display: block;
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+.aw-select-search-noresults
+{
+	padding: 10px;
+	padding-bottom: 10px;
+	color: firebrick;
+	display: none;
 }

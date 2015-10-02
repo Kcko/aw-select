@@ -86,3 +86,27 @@
 	background: #0080c0;
 	color: #fff;
 }
+
+
+.aw-select-dark-search
+{
+	padding: 10px;
+}
+
+.aw-select-dark-search input
+{
+	-moz-box-sizing: border-box;	
+	box-sizing: border-box;
+	width: 100%;
+	display: block;
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+.aw-select-dark-search-noresults
+{
+	padding: 0 10px;
+	padding-bottom: 10px;
+	color: firebrick;
+	display: none;
+}

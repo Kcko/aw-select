@@ -1,27 +1,38 @@
 ;(function($){
 
+
+	$.fn.AWScrollTo = function(elem) { 
+	    $(this).scrollTop($(this).scrollTop() - $(this).offset().top + $(elem).offset().top); 
+	    return this; 
+	};
+
+
 	$.fn.AWSelect = function(options) {
 
 			var defaults = {
 
-
-				selectedValue: null,
-				selectClassName: 'aw-select', 
+				
+				selectedValue        : null,
+				selectClassName      : 'aw-select', 
 				selectHeaderAllowHtml: true,
+				filterShow           : true,
+				filterText           : 'Find ...',
+				filterNoResult       : 'Sorry, no results ...',
 
-				onCreate: function(selectDiv, select) {
 
-				},
-				
-				onOpen: function(selectDiv, select) {
-
-				},
-				
-				onChoseItem: function(selectDiv, select, item) {
+				onCreate: function(fakeSelect, nativeSelect) {
 
 				},
 				
-				onClose: function(selectDiv, select) {
+				onOpen: function(fakeSelect, nativeSelect) {
+
+				},
+				
+				onChoseItem: function(fakeSelect, nativeSelect, item) {
+
+				},
+				
+				onClose: function(fakeSelect, nativeSelect) {
 
 				},
 
@@ -35,34 +46,39 @@
 			options  = $.extend(defaults, options);
 
 
-			function Select($select)
+			function makeUrl(s)
+			{
+
+				var nodiac = { 'á': 'a', 'č': 'c', 'ď': 'd', 'é': 'e', 'ě': 'e', 'í': 'i', 'ň': 'n', 'ó': 'o', 'ř': 'r', 'š': 's', 'ť': 't', 'ú': 'u', 'ů': 'u', 'ý': 'y', 'ž': 'z' };
+				s = s.toLowerCase();
+			    var s2 = '';
+			    for (var i=0; i < s.length; i++) {
+			        s2 += (typeof nodiac[s.charAt(i)] != 'undefined' ? nodiac[s.charAt(i)] : s.charAt(i));
+			    }
+
+			    return s2;
+			    //return s2.replace(/[^a-z0-9_]+/g, '-').replace(/^-|-$/g, '');
+			}
+
+
+
+			function NativeSelect($select)
 			{
 				this.select       = $select;
 				this.options      = this.select.children("option");
 				this.optionsTotal = this.options.length;
-
-				this.getOptions =  function() {
-
-					return this.options;
-				};
-
-				this.selectedItem =  function($selectedItem) {
-
-					$selectedItem.siblings().removeClass("selected");
-					$selectedItem.addClass("selected");
-
-				};
-
 			}
 
 
-			function Template(select) {
+			function FakeSelect(nativeSelect) {
 
-				this.template       = $('<div class="'+options.selectClassName+'"><div class="header"></div><div class="body"></div></div>');
-				this.templateHeader = this.template.find(".header");
-				this.templateBody   = this.template.find(".body");
-				this.ul             = $("<ul>");
-				this.select         = select;
+				this.searchInput     = '<div class="'+options.selectClassName+'-search"><input type="text" placeholder="'+options.filterText+'" /></div>';
+				this.searchNoResults = '<div class="'+options.selectClassName+'-search-noresults">'+options.filterNoResult+'</div>';
+				this.template        = $('<div class="'+options.selectClassName+'"><div class="header"></div><div class="body"></div></div>');
+				this.header          = this.template.find(".header");
+				this.body            = this.template.find(".body");
+				this.ul              = $("<ul>");
+				this.nativeSelect    = nativeSelect;
 
 		
 				this.getTemplate = function() {
@@ -70,15 +86,14 @@
 				};
 
 				this.getHeader = function() {
-					return this.templateHeader;
+					return this.header;
 				};			
 
 				this.getBody = function() {
-					return this.templateBody;
+					return this.body;
 				};
 
 				this.getList = function() {
-
 					return this.ul;
 				};
 
@@ -86,7 +101,7 @@
 
 					var $ul = this.ul;
 					var list = [];
-					this.select.getOptions().each(function(index){
+					this.nativeSelect.options.each(function(index){
 
 						var $option = $(this);
 						var $li     = $("<li>", {
@@ -102,91 +117,172 @@
 
 					this.getBody().append($ul);
 
-				}
+					// add filter search
+					if (options.filterShow)
+					{
+						this.getBody().prepend(this.searchNoResults);
+						this.getBody().prepend(this.searchInput);
+					}
+
+				};
+
+				this.setSelected =  function($selectedItem) {
+
+					$selectedItem.siblings().removeClass("selected");
+					$selectedItem.addClass("selected");
+				
+				};
+
+
+				this.open = function() {
+
+					this.template.addClass('opened');
+				};
+
+				this.close = function() {
+
+					// reset search input
+					if (this.nativeSelect.select.data('options').filterShow)
+					{
+						this.template.find('input').val('').trigger('keyup');
+					}
+
+					this.template.removeClass('opened');
+				};
 
 			}
+			
 
 			return this.each(function(){
 
-
 				// cache select element
-				var $select  = $(this);
-				
+				var $select      = $(this);
+
 				// select init & store & prepare
-				var _select = new Select($select);
+				var nativeSelect = new NativeSelect($select);
 				
-				// template for fake select
-				var _template = new Template(_select);
-				_template.createList();
+				// fakeselect (wrapper) for fake select
+				var fakeSelect   = new FakeSelect(nativeSelect);
+				fakeSelect.createList();
+
+				$select.data('nativeSelect', nativeSelect)
+				$select.data('fakeSelect', fakeSelect);
+				$select.data('options', options);
 
 
 				// set default text
-				_template.getHeader().text($select.children("option").eq(0).text());
+				fakeSelect.getHeader().text($select.children("option").eq(0).text());
 
 				// click on fake select
-				_template.getTemplate().on('click', function(e){
+				fakeSelect.getTemplate().on('click', function(e){
+
 
 					var openedSelects = $('.' + options.selectClassName).not(this).filter('.opened');
 					if (openedSelects.length)
 					{
 						openedSelects.each(function(){
-							$(this).trigger('click');
+
+							// reset 
+							var openSelect = $(this);
+							openSelect.trigger('click');
 						});
 					}
 
 
+
 					if ($(this).hasClass('opened'))
 					{
-						$(this).removeClass('opened');
-						options.onClose.call(this, _template.getTemplate(), $select);
+						fakeSelect.close();
+						options.onClose.call(this, fakeSelect.getTemplate(), $select);
+
 					}
 					else
 					{
-						$(this).addClass('opened');
-						options.onOpen.call(this, _template.getTemplate(), $select);
+						fakeSelect.open();
+						options.onOpen.call(this, fakeSelect.getTemplate(), $select);
+
 					}
 
-					_template.getBody().scrollTop(0); // scroll up again
-					
+					//fakeSelect.getBody().scrollTop(0); // scroll up again
+					// set scrollbar position 
+					fakeSelect.getList().AWScrollTo(fakeSelect.getBody().find('li.selected'));
+
+
 				});
 
 
 
 				// click on list item
-				_template.getList().find('li').on('click', function(e){
+				fakeSelect.getList().find('li').on('click', function(e){
 
 					e.stopPropagation();
 
 					var $selectedItem = $(this);
 
-					_select.selectedItem($selectedItem);
-					options.selectHeaderAllowHtml ? _template.getHeader().html($selectedItem.html()) : _template.getHeader().text($selectedItem.text());
+					fakeSelect.setSelected($selectedItem);
+					options.selectHeaderAllowHtml ? fakeSelect.getHeader().html($selectedItem.html()) : fakeSelect.getHeader().text($selectedItem.text());
 					$select.val($selectedItem.data('value'));
 
-					options.onChoseItem.call(this, _template.getTemplate(), $select, $selectedItem);
-					options.onClose.call(this, _template.getTemplate(), $select);				
+					options.onChoseItem.call(this, fakeSelect.getTemplate(), $select, $selectedItem);
+					options.onClose.call(this, fakeSelect.getTemplate(), $select);				
 
-					$(document).trigger('click');
+					fakeSelect.close();
 				});	
+
+
+
+				// click on search
+				fakeSelect.getTemplate().find('input').on('click', function(e){
+
+					e.stopPropagation();
+					var $searchInput = $(this);
+
+					$searchInput.on('keyup', function(){
+
+						var searchWord     = makeUrl($.trim($searchInput.val()));
+						var nothingFounded = true;
+
+						fakeSelect.getList().find('li').each(function(){
+
+							var $li         = $(this);
+							var $textNodiac = makeUrl($li.text());
+							
+							if ($textNodiac.match(searchWord))
+							{
+								nothingFounded = false;
+								$li.show();
+							}
+							else
+							{
+								$li.hide();
+							}
+						});
+
+						fakeSelect.getTemplate().find('.' + options.selectClassName +'-search-noresults')[nothingFounded ? 'show' : 'hide']();
+					
+					});
+
+				});
+
 
 
 				// selectd value
 				var $selectedOption = $('option:selected', $select);
-				var $selectedItem   = _template.getList().find('li[data-value='+$selectedOption.val()+']');
+				var $selectedItem   = fakeSelect.getList().find('li[data-value='+$selectedOption.val()+']');
 
 
 				// explicit way = selected value by option settings
 				if (options.selectedValue !== null)
 				{
-					var $selectedItem   = _template.getList().find('li[data-value='+options.selectedValue+']');
+					var $selectedItem   = fakeSelect.getList().find('li[data-value='+options.selectedValue+']');
 				}
 
 
 
 				if ($selectedItem.length)
 				{
-					_select.selectedItem($selectedItem);
-					options.selectHeaderAllowHtml ? _template.getHeader().html($selectedItem.html()) : _template.getHeader().text($selectedItem.text());
+					fakeSelect.setSelected($selectedItem);
+					options.selectHeaderAllowHtml ? fakeSelect.getHeader().html($selectedItem.html()) : fakeSelect.getHeader().text($selectedItem.text());
 					
 					$select.val($selectedItem.data('value'));
 				}
@@ -196,22 +292,24 @@
 				// close select on document area click
 				$(document).on('click', function(e){
 
+
 					var $target = $(e.target);
 					var $parent = $target.closest('.' + options.selectClassName);
 					
 					if (!$parent.length)
 					{
-						_template.getTemplate().removeClass('opened');
-						options.onClose.call(this, _template.getTemplate(), $select);
+						fakeSelect.close();
+						options.onClose.call(this, fakeSelect.getTemplate(), $select);
 					}
 				});
 
 				// final output, hide native select
-				_template.getTemplate().insertAfter($select);
+				fakeSelect.getTemplate().insertAfter($select);
 
 
 				// onCreated
-				options.onCreate.call(this, _template.getTemplate(), $select);
+				options.onCreate.call(this, fakeSelect.getTemplate(), $select);
+
 
 
 				$select.hide();

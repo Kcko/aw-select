@@ -28,18 +28,21 @@
 			$("#countries").AWSelect({
 
 
-				//selectedValue: 'it',
+				selectedValue: 'it',
 
-				onCreate: function(selectDiv, select) {
+				filterShow: true,
 
-					$(selectDiv).after("<p>onCreate: vytvořen select z #first-select</p>");
+				onCreate: function(fakeSelect, nativeSelect) {
+
+					$(fakeSelect).after("<p>onCreate: vytvořen select z #first-select</p>");
+
 				},
 
 				selectOptionText: function(option, optionText) {
 
 					var $option = $(option);
 					var $flag   = $option.data('flag');
-					var $users   = $option.data('users');
+					var $users  = $option.data('users');
 
 					return "<img src='flags/"+$flag+"' /> " + optionText + '<span style=\"color: gray; display: inline-block; margin-left: 5px;\">('+$users+')</span>';
 				}
@@ -66,24 +69,24 @@
 
 				selectedValue: null,
 
-				onCreate: function(selectDiv, select) {
+				onCreate: function(fakeSelect, nativeSelect) {
 
-					console.log('onCreate', selectDiv, select);
+					//console.log('onCreate', fakeSelect, nativeSelect);
 				},
 
-				onOpen: function(selectDiv, select) {
+				onOpen: function(fakeSelect, nativeSelect) {
 
-					console.log('onOpen', selectDiv, select);
+					//console.log('onOpen', fakeSelect, nativeSelect);
 				},
 
-				onClose: function(selectDiv, select) {
+				onClose: function(fakeSelect, nativeSelect) {
 
-					console.log('onClose', selectDiv, select);
+					//console.log('onClose', fakeSelect, nativeSelect);
 				},			
 
-				onChoseItem: function(selectDiv, select, item) {
+				onChoseItem: function(fakeSelect, nativeSelect, item) {
 
-					console.log('onChoseItem', selectDiv, select, item);
+					//console.log('onChoseItem', fakeSelect, nativeSelect, item);
 				}
 			});		
 
@@ -103,6 +106,7 @@
 	
 
 <select name="select1" id="countries">
+	<option value="cn" data-flag='cn.png' data-users="220 milionů">Čína</option>
 	<option value="cz" data-flag='cz.png' data-users="10 milionů">Česká republika - hodně dlouhý popisek aby se schválně nevešel a musel být oříznut</option>
 	<option value="de" data-flag='de.png' data-users="60 milionů">Německo</option>
 	<option value="jp" data-flag='jp.png' data-users="230 milionů">Japonsko</option>
@@ -145,6 +149,11 @@
 <input type="submit" name="submit" value="Odeslat" />
 
 </form>
+
+
+
+
+
 
 
 
