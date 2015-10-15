@@ -1,14 +1,16 @@
 # aw-select
 ultralight javascript dummy selectbox
 
-## changelog
+## Changelog
+- 15.10.2015 - Bower manisted added
 - 2.10.2015 - major parts rewritten, filter added
 - 1.10.2015 - fixes, small improvements
 - 30.9.2015 - first version, initial commit, buggy
 
+## How to install?
+With Bower ```bower install aw-select``` or [direct download](https://github.com/Kcko/aw-select/archive/master.zip) from Github
 
-
-## settings
+## Settings
 ```javascript
 
     selectedValue: null,
