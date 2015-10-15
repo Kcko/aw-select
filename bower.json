@@ -1,0 +1,22 @@
+{
+  "name": "AW-select",
+  "version": "1.0.2",
+  "authors": [
+    "Kcko <admin@rjwebdesign.cz>"
+  ],
+  "description": "Tiny select by ANDWEB s.r.o.",
+  "keywords": [
+    "jquery",
+    "select",
+    "css"
+  ],
+  "license": "MIT",
+  "homepage": "http://rjwebdesign.cz",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
