@@ -126,7 +126,13 @@
 						var $li     = $("<li>", {
 						'html'      : options.selectOptionText.call(this, $option, $option.text()),
 						'data-value': $option.val()
-						});
+					});
+
+						// add own data attributes
+						for (var key in $option.data()) 
+						{
+							$li.attr('data-' + key, $option.data(key));
+						}
 
 						
 						list.push($li);
@@ -265,11 +271,14 @@
 
 							var $li         = $(this);
 							var $textNodiac = makeUrl($li.text());
-							
+
+						
 							if ($textNodiac.match(searchWord))
 							{
 								nothingFounded = false;
 								$li.show();
+
+								
 							}
 							else
 							{

@@ -2,6 +2,7 @@
 ultralight javascript dummy selectbox
 
 ## Changelog
+- 10.12.2015 - Own data attributes added and moveable with native select to ul placeholder
 - 15.10.2015 - Bower manisted added
 - 2.10.2015 - major parts rewritten, filter added
 - 1.10.2015 - fixes, small improvements
