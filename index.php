@@ -125,14 +125,14 @@
 
 
 <select name="select2" class="aw-select">
-	<? for ($i = 1; $i <= 10; $i++): ?>
+	<?php for ($i = 1; $i <= 10; $i++): ?>
 	<option value="b<?= $i ?>">Název položky <?= $i ?></option>
 	<? endfor; ?>
 </select>
 
 
 <select name="select3" class="aw-select">
-	<? for ($i = 1; $i <= 20; $i++): ?>
+	<?php for ($i = 1; $i <= 20; $i++): ?>
 	<option value="c<?= $i ?>">Název položky <?= $i ?></option>
 	<? endfor; ?>
 </select>
