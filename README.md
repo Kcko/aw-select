@@ -45,7 +45,7 @@ With Bower ```bower install aw-select``` or [direct download](https://github.com
  
 ## [see demo](http://code.rjwebdesign.cz/aw-select/)
 
-## Roadmap
+## Roadmap (01/02/2019)
 
 1. Ajax remote 
 2. Highlighting search phrase
