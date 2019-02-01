@@ -45,3 +45,16 @@ With Bower ```bower install aw-select``` or [direct download](https://github.com
  
 ## [see demo](http://code.rjwebdesign.cz/aw-select/)
 
+## Roadmap
+
+1. Ajax remote 
+2. Highlighting search phrase
+3. Move with arrow keys
+4. Internal code refactoring (NS, separatate helpers and objects out of plugin ...)
+5. Possibility to use methods from object via public methods of plugin.
+6. Theming (Bootstrap look)
+7. Add to npm package (bower is †)
+8. SCSS support
+
+### When?
+Probably this year ;-) (2019 or later)
